@@ -273,7 +273,7 @@ public class Game{
     g.stopwatchOn();g.addPlayer(new RandomAgent());g.stopwatchOff(1000,'A');
     g.stopwatchOn();g.addPlayer(new RandomAgent());g.stopwatchOff(1000,'B');
     g.stopwatchOn();g.addPlayer(new RandomAgent());g.stopwatchOff(1000,'C');
-    g.stopwatchOn();g.addPlayer(new RandomAgent());g.stopwatchOff(1000,'D');
+    g.stopwatchOn();g.addPlayer(new kiddieAgent());g.stopwatchOff(1000,'D');
     g.stopwatchOn();g.addPlayer(new newbieAgent());g.stopwatchOff(1000,'E');
     g.setup();
     g.play();
