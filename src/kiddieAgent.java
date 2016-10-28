@@ -1,4 +1,4 @@
-import java.util.*;
+//import java.util.*;
 
 
 public class kiddieAgent implements Agent {
@@ -21,16 +21,16 @@ public class kiddieAgent implements Agent {
 	public void get_status(String name, String players, String spies, int mission, int failures) {
 		if(firstTime){
 			this.myName =  name.charAt(0);
-			playerNames = players.toCharArray();
-		    spy = spies.indexOf(name)!=-1;
-		    playersStr = players;
+			this.playerNames = players.toCharArray();
+		    this.spy = spies.indexOf(name)!=-1;
+		    this.playersStr = players;
 		    if(spy){
 		    	spyNames = spies.toCharArray();
 			    myLocSpy = spies.indexOf(name);
 		    }
-		    myLoc = players.indexOf(name);
-		    playerNum = players.length();
-		    suspicion = new int[playerNum];
+		    this.myLoc = players.indexOf(name);
+		    this.playerNum = players.length();
+		    this.suspicion = new int[playerNum];
 		    firstTime = false;
 		}
 		turn = mission;
@@ -41,6 +41,7 @@ public class kiddieAgent implements Agent {
 	 * if there needs to be more than the number of spies, (eg. 3 needed on mission and only 2 spies), then it'll select one non-spy closest to A
 	 */
 	public String do_Nominate(int number) {
+		System.out.println(myName+" is at do_nominate, it's "+spy+" that I'm a spy.");
 		int curr = 0;
 		String nom = ""+myName;
 		while(curr<number){
@@ -50,11 +51,11 @@ public class kiddieAgent implements Agent {
 						if(!contains(playerNames[i],spyNames)){
 							nom=nom+playerNames[i];
 							curr++;
+						}
 					}
 				}
-			}
-			for(int i=0;i<number-1;i++){
-				if(spyNames[i] != myName){
+				for(int i=0;i<number-1;i++){
+					if(spyNames[i] != myName){
 						nom=nom+spyNames[(myLocSpy+i)%playerNum];
 						curr++;
 					}
@@ -77,15 +78,16 @@ public class kiddieAgent implements Agent {
 	}
 
 	/* Checks the suspicion level for each mission member and sums it up.
-	 * If the team's suspicion level is more than the double of the number of failures, then it votes against it.
+	 * If the team's suspicion level is more than an arbitrary number (failures x2 +1), then it votes against it.
 	*/
 	public boolean do_Vote() {
 		int teamSus = 0;
 		for(char c:nominees){
 			int n = playersStr.indexOf(c);
 			teamSus = teamSus + suspicion[n];
+			System.out.println("Team suspicion: "+teamSus+"  Threshold: "+(2*failure+1));
 		}
-		if(teamSus<(2*failure)){
+		if(teamSus<(2*failure+1)){
 			return true;
 		}
 		return false;
@@ -101,15 +103,10 @@ public class kiddieAgent implements Agent {
 
 	}
 
-	//if spy, it has a 50% chance to betray.
 	public boolean do_Betray() {
 		if(spy){
-			Random rand = new Random();
-			int r = rand.nextInt();
-			if((r%2)==1){
+			
 				return true;
-			}
-			return false;
 		}
 		return false;
 	}
